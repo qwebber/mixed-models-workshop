@@ -77,7 +77,28 @@ dragons %>% GGally::ggpairs()
 
 ```
 
-## Getting started with syntax:
+## Model test score against body length and mountain range using linear model
+
+```{r}
+
+model1 <- lm(testScore ~ bodyLength + mountainRange, data = dragons)
+summary(model1)
+
+```
+
+## Our interpretation of this model is that body length does not affect test score, though there are differences in test score across mountain ranges. If we are not interested in testing for differences between mountan rages, we can used mixed models to assess whether body length affects test scores by controlling for the variation between mountain ranges.
+
+## Upgrade to mixed model
+
+Here we use the syntax `(1|mountainRage)` to incorporate mountain range as a random effect 
+
+```{r}
+
+model2 <- lmer(testScore ~ bodyLength + (1|mountainRange), data = dragons)
+summary(model2)
+
+```
+
 
 Mixed model syntax using the `lmer`, `nlme`, and `glmmTMB` packages are similar. 
 
