@@ -6,6 +6,7 @@ date: '2023-03-10'
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
 ```
 
 ## What are mixed models and why should we use them?
@@ -14,9 +15,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Mixed effects models and the introduction of random effects have a number of key (non-mutually exclusive) benefits (adapted from Harrison et al. 2018): 
 
-  1.  Biological datasets are often highly structured, containing clusters of non-independent observational units that are hierarchical in nature, and mixed models allow us to explicitly model the non-independence in such data. 
-  2.  Explicit modelling of the random effects structure will aid correct inference about fixed effects, depending on which level of the system’s hierarchy is being manipulated. 
-  3.  Random effects typically represent some grouping variable and allow the estimation of variance in the response variable within and among these groups, which reduces the probability of false positives (Type I error rates) and false negatives (Type II error rates).
+  1.  **Complex datasets with built in non-independence:** Biological datasets are often highly structured, containing clusters of **non-independent observational units** that are hierarchical in nature, and mixed models allow us to explicitly model the non-independence in such data. 
+  2.  **Improved inference:** Explicit modelling of the random effects structure will improve  inference about fixed effects, depending on which level of the system’s hierarchy is being manipulated. 
+  3.  **Grouping variables:** Random effects typically represent some **grouping variable** and allow the estimation of variance in the response variable within and among these groups, which reduces the probability of false positives (Type I error rates) and false negatives (Type II error rates).
+
 
 
 ## Mixed model resources: 
@@ -33,21 +35,57 @@ And the following published articles and books:
 
 
 ## load key libraries
-```{r lme4}
-library(Matrix)
+```{r , message = FALSE, results = 'asis', warning = FALSE}
 library(lme4)
 library(nlme)
 library(ggplot2)
-library(broom.mixed)
+library(tidyverse)
 ```
 
 ## When should we use mixed models: 
 
+Mixed models are most appropriate when: 
 
+  1. Data have inherent **non-independence** through nested variables
+  2. One or more variable are **grouped** and (as the user) we want to account for variance within and among groups, but not we are not interested in the statistical effect of that grouped variable on our response variable. 
+
+## Example data
+
+We will use the [dragon](http://gkhajduk.d.pr/9GPn/3nbbPoK6) data, which includes data on body length and test score for dragons from 8 mountain ranges. Within each mountain range there are three sites (a, b, and c).
+
+We will follow prior examples using these data from [Elise Gallois](https://ourcodingclub.github.io/tutorials/mixed-models/).
+
+## Explore the data
+```{r, message = FALSE, warning = FALSE}
+
+## load dragon data 
+load("dragons.RData")
+
+## convert to tibble and check out the columns
+dragons <- as_tibble(dragons)
+
+## remove X column and 
+dragons <-   
+    dragons %>% 
+    select(-X) 
+
+## view head of dataset 
+head(dragons)
+
+## check relationships between all pairwise combinations of variables
+dragons %>% GGally::ggpairs()
+
+```
 
 ## Getting started with syntax:
 
-Mixed model syntax using the `lmer`, `nlme`, and `glmmTMB` packages is similar. 
+Mixed model syntax using the `lmer`, `nlme`, and `glmmTMB` packages are similar. 
+
+Using the same syntax as a linear model
+
+## Examples of mixed models
+
+
 
 
 
