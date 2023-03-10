@@ -25,7 +25,7 @@ Mixed effects models and the introduction of random effects have a number of key
 
 For more details, code, and more information on using mixed effects models see the following online resources: 
 
-  1. [Our coding club](https://ourcodingclub.github.io/tutorials/mixed-models/>)
+  1. [Our coding club - Elise Gallois](https://ourcodingclub.github.io/tutorials/mixed-models/)
   2. [Is it fixed or random?](https://dynamicecology.wordpress.com/2015/11/04/is-it-a-fixed-or-random-effect/)
   3. [Why are our models so complex?](https://dynamicecology.wordpress.com/2014/12/02/why-are-your-statistical-models-more-complex-these-days/)
 
@@ -140,5 +140,11 @@ summary(model2)
 
 ## Interpretation of mixed model
 
+## Incorporating additional random effects 
 
+### Nested random effects
+
+### Crossed random effects 
+
+## Random slopes
 
