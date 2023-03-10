@@ -90,6 +90,14 @@ summary(model1)
 
 ## Upgrade to mixed model
 
+## Key difference between fixed and random effects
+
+# Fixed effects
+
+Fixed effects are variables that we 
+
+# Random effects
+
 Here we use the syntax `(1|mountainRage)` to incorporate mountain range as a random effect 
 
 ```{r}
