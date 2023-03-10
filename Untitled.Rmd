@@ -26,6 +26,8 @@ Mixed effects models and the introduction of random effects have a number of key
 For more details, code, and more information on using mixed effects models see the following online resources: 
 
   1. [Our coding club](https://ourcodingclub.github.io/tutorials/mixed-models/>)
+  2. [Is it fixed or random?](https://dynamicecology.wordpress.com/2015/11/04/is-it-a-fixed-or-random-effect/)
+  3. [Why are our models so complex?](https://dynamicecology.wordpress.com/2014/12/02/why-are-your-statistical-models-more-complex-these-days/)
 
 And the following published articles and books: 
 
@@ -86,17 +88,21 @@ summary(model1)
 
 ```
 
-## Our interpretation of this model is that body length does not affect test score, though there are differences in test score across mountain ranges. If we are not interested in testing for differences between mountan rages, we can used mixed models to assess whether body length affects test scores by controlling for the variation between mountain ranges.
+## Interpretation of linear model
+
+Our interpretation of this model is that body length does not affect test score, though there are differences in test score across mountain ranges. If we are not interested in testing for differences between mountan rages, we can used mixed models to assess whether body length affects test scores by controlling for the variation between mountain ranges.
 
 ## Upgrade to mixed model
 
-## Key difference between fixed and random effects
+# Key difference between fixed and random effects
 
-# Fixed effects
+**Fixed effects** are variables that we expect will have a biological effect on our response variable. These can be continuous or categorical. In our case, we are interested in the effect of body length on test score.
 
-Fixed effects are variables that we 
+**Random effects** are grouped factors for which we are trying to control (i.e. those we don't want to test for biological or statistical effects). Random effects MUST be categorical and you can't force them to be continuous. A general rule of thumb about random effects is that there must be at least 5 levels within the variable (e.g. there are 8 mountain ranges). Fewer than 5 levels and this variable should either be excluded or considered a fixed effect. Estimating variance on <5 data points is very imprecise and although it is technically possible (R will give an output), we have limited confidence in these estimates. 
 
-# Random effects
+# Fitting a mixed model
+
+We know that our response variable (test score) has unexplained residual variation associated with the mountain range variable. By incorporating mountain range as a random effect, we are modeling the unexplained variation through variance partitioning.
 
 Here we use the syntax `(1|mountainRage)` to incorporate mountain range as a random effect 
 
@@ -107,19 +113,7 @@ summary(model2)
 
 ```
 
-
-Mixed model syntax using the `lmer`, `nlme`, and `glmmTMB` packages are similar. 
-
-Using the same syntax as a linear model
-
-## Examples of mixed models
+## Interpretation of mixed model
 
 
 
-
-
-```{r, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
