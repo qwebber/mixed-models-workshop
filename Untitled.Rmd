@@ -8,24 +8,50 @@ date: '2023-03-10'
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## What are mixed models?
+## What are mixed models and why should we use them?
 
-**Mixed effects models ** are an extension of linear models that...  For more details on using mixed effects models see <https://ourcodingclub.github.io/tutorials/mixed-models/>, <>.
+**Mixed effects models ** are an extension of linear models that include a combination of fixed and random effects (Bolker et al. 2009; Harrison et al. 2018). 
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Mixed effects models and the introduction of random effects have a number of key (non-mutually exclusive) benefits (adapted from Harrison et al. 2018): 
+
+  1.  Biological datasets are often highly structured, containing clusters of non-independent observational units that are hierarchical in nature, and mixed models allow us to explicitly model the non-independence in such data. 
+  2.  Explicit modelling of the random effects structure will aid correct inference about fixed effects, depending on which level of the system’s hierarchy is being manipulated. 
+  3.  Random effects typically represent some grouping variable and allow the estimation of variance in the response variable within and among these groups, which reduces the probability of false positives (Type I error rates) and false negatives (Type II error rates).
+
+
+## Mixed model resources: 
+
+For more details, code, and more information on using mixed effects models see the following online resources: 
+
+  1. [Our coding club](https://ourcodingclub.github.io/tutorials/mixed-models/>)
+
+And the following published articles and books: 
+
+  1. [Harrison et al. 2018 A brief introduction to mixed effects modelling and multi-model inference in ecology](<https://peerj.com/articles/4794/)
+  2. [Bolker et al. 2009 Generalized linear mixed models: a practical guide for ecology and evolution](https://www.sciencedirect.com/science/article/pii/S0169534709000196?via%3Dihub)
+  3. [Zuur et al. 2009 Mixed Effects Models and Extensions in Ecology with R](https://link.springer.com/book/10.1007/978-0-387-87458-6)
+
 
 ## load key libraries
 ```{r lme4}
+library(Matrix)
 library(lme4)
+library(nlme)
 library(ggplot2)
 library(broom.mixed)
 ```
 
-## Including Plots
+## When should we use mixed models: 
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
+
+## Getting started with syntax:
+
+Mixed model syntax using the `lmer`, `nlme`, and `glmmTMB` packages is similar. 
+
+
+
+```{r, echo=FALSE}
 plot(pressure)
 ```
 
