@@ -12,7 +12,7 @@
 
 <meta name="date" content="2023-03-10" />
 
-<title>mixed-models-code</title>
+<title>mixed-models-workshop</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -354,14 +354,14 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">mixed-models-code</h1>
+<h1 class="title toc-ignore">mixed-models-workshop</h1>
 <h4 class="date">2023-03-10</h4>
 
 </div>
 
 
-<div id="r-markdown" class="section level2">
-<h2>R Markdown</h2>
+<div id="what-are-mixed-models" class="section level2">
+<h2>What are mixed models?</h2>
 <p>This is an R Markdown document. Markdown is a simple formatting
 syntax for authoring HTML, PDF, and MS Word documents. For more details
 on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
@@ -369,14 +369,10 @@ on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http:
 generated that includes both content as well as the output of any
 embedded R code chunks within the document. You can embed an R code
 chunk like this:</p>
-<pre class="r"><code>summary(cars)</code></pre>
-<pre><code>##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00</code></pre>
+<pre class="r"><code>library(lme4)</code></pre>
+<pre><code>## Loading required package: Matrix</code></pre>
+<pre class="r"><code>library(ggplot2)
+library(broom.mixed)</code></pre>
 </div>
 <div id="including-plots" class="section level2">
 <h2>Including Plots</h2>
