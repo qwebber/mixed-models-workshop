@@ -11,32 +11,30 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## What are mixed models and why should we use them?
 
-**Mixed effects models ** are an extension of linear models that include a combination of fixed and random effects (Bolker et al. 2009; Harrison et al. 2018). 
+**Mixed effects models** are an extension of linear models that include a combination of fixed and random effects (Bolker et al. 2009; Harrison et al. 2018).
 
-Mixed effects models and the introduction of random effects have a number of key (non-mutually exclusive) benefits (adapted from Harrison et al. 2018): 
+Mixed effects models and the introduction of random effects have a number of key (non-mutually exclusive) benefits (adapted from Harrison et al. 2018):
 
-  1.  **Complex datasets with built in non-independence:** Biological datasets are often highly structured, containing clusters of **non-independent observational units** that are hierarchical in nature, and mixed models allow us to explicitly model the non-independence in such data. 
-  2.  **Improved inference:** Explicit modelling of the random effects structure will improve  inference about fixed effects, depending on which level of the system’s hierarchy is being manipulated. 
-  3.  **Grouping variables:** Random effects typically represent some **grouping variable** and allow the estimation of variance in the response variable within and among these groups, which reduces the probability of false positives (Type I error rates) and false negatives (Type II error rates).
+1.  **Complex datasets with built in non-independence:** Biological datasets are often highly structured, containing clusters of **non-independent observational units** that are hierarchical in nature, and mixed models allow us to explicitly model the non-independence in such data.
+2.  **Improved inference:** Explicit modelling of the random effects structure will improve inference about fixed effects, depending on which level of the system's hierarchy is being manipulated.
+3.  **Grouping variables:** Random effects typically represent some **grouping variable** and allow the estimation of variance in the response variable within and among these groups, which reduces the probability of false positives (Type I error rates) and false negatives (Type II error rates).
 
+## Mixed model resources:
 
+For more details, code, and more information on using mixed effects models see the following online resources:
 
-## Mixed model resources: 
+1.  [Our coding club - Elise Gallois](https://ourcodingclub.github.io/tutorials/mixed-models/)
+2.  [Is it fixed or random?](https://dynamicecology.wordpress.com/2015/11/04/is-it-a-fixed-or-random-effect/)
+3.  [Why are our models so complex?](https://dynamicecology.wordpress.com/2014/12/02/why-are-your-statistical-models-more-complex-these-days/)
 
-For more details, code, and more information on using mixed effects models see the following online resources: 
+And the following published articles and books:
 
-  1. [Our coding club - Elise Gallois](https://ourcodingclub.github.io/tutorials/mixed-models/)
-  2. [Is it fixed or random?](https://dynamicecology.wordpress.com/2015/11/04/is-it-a-fixed-or-random-effect/)
-  3. [Why are our models so complex?](https://dynamicecology.wordpress.com/2014/12/02/why-are-your-statistical-models-more-complex-these-days/)
-
-And the following published articles and books: 
-
-  1. [Harrison et al. 2018 A brief introduction to mixed effects modelling and multi-model inference in ecology](<https://peerj.com/articles/4794/)
-  2. [Bolker et al. 2009 Generalized linear mixed models: a practical guide for ecology and evolution](https://www.sciencedirect.com/science/article/pii/S0169534709000196?via%3Dihub)
-  3. [Zuur et al. 2009 Mixed Effects Models and Extensions in Ecology with R](https://link.springer.com/book/10.1007/978-0-387-87458-6)
-
+1.  [Harrison et al. 2018 A brief introduction to mixed effects modelling and multi-model inference in ecology](%3Chttps://peerj.com/articles/4794/)
+2.  [Bolker et al. 2009 Generalized linear mixed models: a practical guide for ecology and evolution](https://www.sciencedirect.com/science/article/pii/S0169534709000196?via%3Dihub)
+3.  [Zuur et al. 2009 Mixed Effects Models and Extensions in Ecology with R](https://link.springer.com/book/10.1007/978-0-387-87458-6)
 
 ## load key libraries
+
 ```{r , message = FALSE, results = 'asis', warning = FALSE}
 library(lme4)
 library(nlme)
@@ -44,12 +42,12 @@ library(ggplot2)
 library(tidyverse)
 ```
 
-## When should we use mixed models: 
+## When should we use mixed models:
 
-Mixed models are most appropriate when: 
+Mixed models are most appropriate when:
 
-  1. Data have inherent **non-independence** through nested variables
-  2. One or more variable are **grouped** and (as the user) we want to account for variance within and among groups, but not we are not interested in the statistical effect of that grouped variable on our response variable. 
+1.  Data have inherent **non-independence** through nested variables
+2.  One or more variable are **grouped** and (as the user) we want to account for variance within and among groups, but not we are not interested in the statistical effect of that grouped variable on our response variable.
 
 ## Example data
 
@@ -58,6 +56,7 @@ We will use the [dragon](http://gkhajduk.d.pr/9GPn/3nbbPoK6) data, which include
 We will follow prior examples using these data from [Elise Gallois](https://ourcodingclub.github.io/tutorials/mixed-models/).
 
 ## Explore the data
+
 ```{r, message = FALSE, warning = FALSE}
 
 ## load dragon data 
@@ -123,13 +122,13 @@ Our interpretation of this model is that body length does not affect test score,
 
 **Fixed effects** are variables that we expect will have a biological effect on our response variable. These can be continuous or categorical. In our case, we are interested in the effect of body length on test score.
 
-**Random effects** are grouped factors for which we are trying to control (i.e. those we don't want to test for biological or statistical effects). Random effects MUST be categorical and you can't force them to be continuous. A general rule of thumb about random effects is that there must be at least 5 levels within the variable (e.g. there are 8 mountain ranges). Fewer than 5 levels and this variable should either be excluded or considered a fixed effect. Estimating variance on <5 data points is very imprecise and although it is technically possible (R will give an output), we have limited confidence in these estimates. 
+**Random effects** are grouped factors for which we are trying to control (i.e. those we don't want to test for biological or statistical effects). Random effects MUST be categorical and you can't force them to be continuous. A general rule of thumb about random effects is that there must be at least 5 levels within the variable (e.g. there are 8 mountain ranges). Fewer than 5 levels and this variable should either be excluded or considered a fixed effect. Estimating variance on \<5 data points is very imprecise and although it is technically possible (R will give an output), we have limited confidence in these estimates.
 
 ### Fitting a mixed model
 
 We know that our response variable (test score) has unexplained residual variation associated with the mountain range variable. By incorporating mountain range as a random effect, we are modeling the unexplained variation through variance partitioning.
 
-Here we use the syntax `(1|mountainRage)` to incorporate mountain range as a random effect 
+Here we use the syntax `(1|mountainRage)` to incorporate mountain range as a random effect
 
 ```{r}
 
@@ -140,11 +139,10 @@ summary(model2)
 
 ## Interpretation of mixed model
 
-## Incorporating additional random effects 
+## Incorporating additional random effects
 
 ### Nested random effects
 
-### Crossed random effects 
+### Crossed random effects
 
 ## Random slopes
-
