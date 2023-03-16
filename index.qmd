@@ -114,7 +114,7 @@ summary(model1)
 
 ## Interpretation of linear model
 
-Our interpretation of this model is that body length does not affect test score, though there are differences in test score across mountain ranges. If we are not interested in testing for differences between mountan rages, we can used mixed models to assess whether body length affects test scores by controlling for the variation between mountain ranges.
+Our interpretation of this model is that body length does not affect test score, though there are differences in test score across mountain ranges. If we are not interested in testing for differences between mountan ranges, we can used mixed models to assess whether body length affects test scores by controlling for the variation between mountain ranges.
 
 ## Upgrade to mixed model
 
@@ -128,7 +128,7 @@ Our interpretation of this model is that body length does not affect test score,
 
 We know that our response variable (test score) has unexplained residual variation associated with the mountain range variable. By incorporating mountain range as a random effect, we are modeling the unexplained variation through variance partitioning.
 
-Here we use the syntax `(1|mountainRage)` to incorporate mountain range as a random effect
+Here we use the syntax `(1|mountainRange)` to incorporate mountain range as a random effect
 
 ```{r}
 
