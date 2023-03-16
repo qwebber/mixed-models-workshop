@@ -137,6 +137,22 @@ summary(model2)
 
 ```
 
+### Where's my p-value??
+
+You might wonde why the `lmer` function from the `lme4` R package does not provide p-values. Douglas Bates (the author of `lme4`) provides a [summary] here<https://stat.ethz.ch/pipermail/r-help/2006-May/094765.html> of why the function does not output p-values. TL;DR -- Bates says the 
+
+Nevertheless, there are ways to pull p-values for your fixed effects. Here are two options:
+
+```{r}
+
+## Extract full model summary (including p-values for each fixed effect):
+jtools::summ(model2)
+
+## another option is to use the nlme R package (function is lme) -- this is the package used by Zuur et al in their books
+model3 <- lme(testScore ~ bodyLength, random = ~1|mountainRange, data = dragons)
+summary(model3)
+
+```
 ## Interpretation of mixed model
 
 Once mountain range is included as a random effect, we can see that body length doesn't actually explain variation in test scores. If we take a look at the fixed effect estimate for body length from the linear ( 0.01267 se +/- 0.07974) and mixed effects models (0.03316 se +/- 0.07865), they are very similar and both have standard errors that overlap zero. 
@@ -217,8 +233,8 @@ Test scores were collected at 3 sites within each of the 8 mountain ranges. Give
 ```{r, message = FALSE, warning = FALSE}
 
 ## mixed model with mountain range and site as nested random effects
-model3 <- lmer(testScore ~ bodyLength + (1|mountainRange/site), data = dragons)
-summary(model3)
+model4 <- lmer(testScore ~ bodyLength + (1|mountainRange/site), data = dragons)
+summary(model4)
 
 #Now let's take a look at the relationship between test score and body length at each mountain range by site combination: 
 
@@ -240,7 +256,7 @@ ggplot(dragons,
 
 ## Random slopes
 
-
+Very possible! Let's talk about this next time...
 
 ## Generalized linear mixed models
 
