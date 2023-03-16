@@ -50,6 +50,16 @@ summary(model1)
 model2 <- lmer(testScore ~ bodyLength + (1|mountainRange), data = dragons)
 summary(model2)
 
+## where's my p-value?
+
+## Extract full model summary (including p-values for each fixed effect):
+jtools::summ(model2)
+
+## another option is to use the nlme R package (function is lme) -- this is the package used by Zuur et al in their books
+model3 <- lme(testScore ~ bodyLength, random = ~1|mountainRange, data = dragons)
+summary(model3)
+
+
 ## generate fake dataset for nested random effects
 df <- tibble(A = runif(150), 
              B = runif(150),
@@ -87,8 +97,8 @@ mod1 <- lmer(A ~ B + (1 | season) + (1 | ID), data = df)
 
 
 ## mixed model with mountain range and site as nested random effects
-model3 <- lmer(testScore ~ bodyLength + (1|mountainRange/site), data = dragons)
-summary(model3)
+model4 <- lmer(testScore ~ bodyLength + (1|mountainRange/site), data = dragons)
+summary(model4)
 
 
 ggplot(dragons, aes(x = bodyLength, y = testScore, colour = site)) +
