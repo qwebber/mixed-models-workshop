@@ -49,3 +49,38 @@ summary(model1)
 ## run mixed model
 model2 <- lmer(testScore ~ bodyLength + (1|mountainRange), data = dragons)
 summary(model2)
+
+## generate fake dataset for nested random effects
+df <- tibble(A = runif(150), 
+             B = runif(150),
+             ID = rep(c("A", "B", "C", "D", "E", 
+                        "F", "G", "H", "I", "J",
+                        "H", "I", "K", "L", "M"), 
+                      times = 10),
+             population = rep(c("1", "2", "3", "4", "5", 
+                                "6", "7", "8", "9", "10"), 
+                              each = 15))
+
+head(df)
+
+## mixed model syntax
+mod1 <- lmer(A ~ B + (1 | population/ID), data = df)
+
+
+## generate fake dataset for crossed random effects
+df <- tibble(A = runif(180), 
+             B = runif(180),
+             ID = rep(c("A", "B", "C", "D", "E", 
+                        "F", "G", "H", "I", "J",
+                        "H", "I", "K", "L", "M"), 
+                      times = 12),
+             season = rep(c("early winter", "mid winter", "late winter", 
+                            "early spring", "mid spring", "late spring",
+                            "early summer", "mid summer", "late summer", 
+                            "early fall", "mid fall", "late fall"), 
+                          each = 15))
+
+head(df)
+
+## mixed model syntax
+mod1 <- lmer(A ~ B + (1 | season) + (1 | ID), data = df)
