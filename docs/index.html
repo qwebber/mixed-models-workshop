@@ -132,7 +132,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <section id="what-are-mixed-models-and-why-should-we-use-them" class="level2">
 <h2 class="anchored" data-anchor-id="what-are-mixed-models-and-why-should-we-use-them">What are mixed models and why should we use them?</h2>
-<p><strong>Mixed effects models </strong> are an extension of linear models that include a combination of fixed and random effects (Bolker et al.&nbsp;2009; Harrison et al.&nbsp;2018).</p>
+<p><strong>Mixed effects models</strong> are an extension of linear models that include a combination of fixed and random effects (Bolker et al.&nbsp;2009; Harrison et al.&nbsp;2018).</p>
 <p>Mixed effects models and the introduction of random effects have a number of key (non-mutually exclusive) benefits (adapted from Harrison et al.&nbsp;2018):</p>
 <ol type="1">
 <li><strong>Complex datasets with built in non-independence:</strong> Biological datasets are often highly structured, containing clusters of <strong>non-independent observational units</strong> that are hierarchical in nature, and mixed models allow us to explicitly model the non-independence in such data.</li>
@@ -321,6 +321,15 @@ bodyLength -0.924</code></pre>
 </section>
 <section id="interpretation-of-mixed-model" class="level2">
 <h2 class="anchored" data-anchor-id="interpretation-of-mixed-model">Interpretation of mixed model</h2>
+<p>Once mountain range is included as a random effect, we can see that body length doesn’t actually explain variation in test scores. If we take a look at the fixed effect estimate for body length from the linear ( 0.01267 se +/- 0.07974) and mixed effects models (0.03316 se +/- 0.07865), they are very similar and both have standard errors that overlap zero.</p>
+<p>What is explaining variance in test score? The answer lies in variance partitioning of random effects.</p>
+<p>In the <code>Random Effects</code> section of the summary for model 2. Note, mountain range = 339.7 and residual = 223.8. To partition the variance in test score accounted for by mountain range we can calculate:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fl">339.7</span><span class="sc">/</span>(<span class="fl">339.7</span> <span class="sc">+</span> <span class="fl">223.8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6028394</code></pre>
+</div>
+</div>
 </section>
 <section id="incorporating-additional-random-effects" class="level2">
 <h2 class="anchored" data-anchor-id="incorporating-additional-random-effects">Incorporating additional random effects</h2>
