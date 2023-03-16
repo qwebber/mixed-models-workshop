@@ -247,3 +247,5 @@ ggplot(dragons,
 Can accommodate non-normal distributions (e.g. Poisson or binomial)
 
 ## Model selection 
+
+It's possible, but there are some tricks for choosing random effects.
