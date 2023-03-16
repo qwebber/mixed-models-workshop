@@ -139,6 +139,19 @@ summary(model2)
 
 ## Interpretation of mixed model
 
+Once mountain range is included as a random effect, we can see that body length doesn't actually explain variation in test scores. If we take a look at the fixed effect estimate for body length from the linear ( 0.01267 se +/- 0.07974) and mixed effects models (0.03316 se +/- 0.07865), they are very similar and both have standard errors that overlap zero. 
+
+What is explaining variance in test score? The answer lies in variance partitioning of random effects. 
+
+In the `Random Effects` section of the summary for model 2. Note, mountain range = 339.7 and residual = 223.8. To partition the variance in test score accounted for by mountain range we can calculate: 
+
+```{r}
+
+339.7/(339.7 + 223.8)
+
+```
+
+
 ## Incorporating additional random effects
 
 ### Nested random effects
