@@ -1,7 +1,7 @@
 ---
-title: "mixed-models-workshop"
+title: "Mixed models workshop - University of Guelph R Users group"
 output: html_document
-date: '2023-03-10'
+date: '2023-03-17'
 ---
 
 ```{r setup, include=FALSE}
