@@ -2,7 +2,6 @@
 library(lme4)
 library(nlme)
 library(ggplot2)
-library(broom.mixed)
 library(tidyverse)
 
 ## load dragon data 
@@ -11,15 +10,15 @@ load("dragons.RData")
 ## convert to tibble and check out the columns
 dragons <- as_tibble(dragons)
 
-## remove X column and view head of dataset
+## remove X column and 
 dragons <-   
   dragons %>% 
   select(-X) 
 
-## check relationships between all pairwise combinations of variables
-dragons %>% GGally::ggpairs()
+## view head of dataset 
+head(dragons)
 
-
+## plot differences in mean test scores across mountain ranges and sites 
 dragons %>% 
   select(mountainRange, site, testScore) %>% 
   filter(!is.na(testScore)) %>% 
@@ -33,18 +32,20 @@ dragons %>%
   theme(axis.text.x = element_text(hjust = 1, angle = 45)) +
   facet_wrap(~ site)
 
+## plot relationship between test score and body length by mountain range
 dragons %>% 
   ggplot(aes(x = bodyLength, 
              y = testScore, 
              color = mountainRange)) + 
   geom_point() 
 
-summary(lmer(bodyLength ~ testScore + (1|mountainRange), data = dragons))
+## check relationships between all pairwise combinations of variables
+dragons %>% GGally::ggpairs()
 
-as_tibble(dragons)
+## run linear model
+model1 <- lm(testScore ~ bodyLength + mountainRange, data = dragons)
+summary(model1)
 
-dragons %>% GGally::ggpairs() 
-
-ggplot(dragons) +
-  geom_boxplot(aes(mountainRange, bodyLength)) +
-  facet_wrap(~site)
+## run mixed model
+model2 <- lmer(testScore ~ bodyLength + (1|mountainRange), data = dragons)
+summary(model2)
