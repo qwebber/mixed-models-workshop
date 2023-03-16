@@ -159,17 +159,60 @@ Depending on the structure of our data, we can incorporate additional random eff
 
 ### Nested random effects
 
-Nested random effects are (in my opinion) easier to interpret. Nested = hierarchical and these are considered a set of variables that can be **within** each other. 
+Nested random effects are (in my opinion) easier to interpret. Nested = hierarchical and these are considered a set of variables that can be **within** each other. I often like to think of nested random effects as sampling through (restricted) space.
 
-For example: observing n = 20 individual organisms in n = 10 different populations (N = 200 data points). If individuals are assigned to a population because they are either spatially or temporally restricted from being in another population, we would **nest** individual identity within population. We can therefore account for both individual and population using nested random effects. The syntax will look like this: 
+For example: observing n = 15 individual organisms in each of n = 10 different populations (N = 150 data points). If individuals are assigned to a population because they are either spatially or temporally restricted from being in another population, we would **nest** individual identity within population. We can therefore account for both individual and population using nested random effects. The syntax will look like this: 
 
 ```{r}
 
-mod1 <- lmer(variable ~ A + B + (1 | population/ID), data = df)
+## generate fake dataset for nested random effects
+df <- tibble(A = runif(150), 
+                B = runif(150),
+                ID = rep(c("A", "B", "C", "D", "E", 
+                           "F", "G", "H", "I", "J",
+                           "H", "I", "K", "L", "M"), 
+                         times = 10),
+                population = rep(c("1", "2", "3", "4", "5", 
+                                   "6", "7", "8", "9", "10"), 
+                                 each = 15))
 
-mod2 <- lmer(variable ~ A + B + (1 | population) + (1|population:ID), data = df)
+head(df)
+
+## mixed model syntax
+mod1 <- lmer(A ~ B + (1 | population/ID), data = df)
+
 ```
 
 ### Crossed random effects
+
+Crossed random effects are are more challenging to assign and interpret (in my opinion). I like to think of crossed random effects as sampling through time. Crossed effects can be assigned when subjets of one variable (e.g. individual ID) have experienced some, or all, of the levels in the other variable (e.g. season). Crossed effects can be **full** (if all IDs are observed in all seasons) or **partial** (if some IDs are observed in some seasons).
+
+For example: If we observe n = 15 individual organisms in each of n = 12 different (sub)seasons (N = 180 data points). Individuals are assigned to a season because they were observed in a season. We can therefore account for both individual and season using crossed random effects. The syntax will look like this: 
+
+```{r}
+
+## generate fake dataset for crossed random effects
+df <- tibble(A = runif(180), 
+                B = runif(180),
+                ID = rep(c("A", "B", "C", "D", "E", 
+                           "F", "G", "H", "I", "J",
+                           "H", "I", "K", "L", "M"), 
+                         times = 12),
+                season = rep(c("early winter", "mid winter", "late winter", 
+                               "early spring", "mid spring", "late spring",
+                               "early summer", "mid summer", "late summer", 
+                               "early fall", "mid fall", "late fall"), 
+                                 each = 15))
+
+head(df)
+
+## mixed model syntax
+mod1 <- lmer(A ~ B + (1 | season) + (1 | ID), data = df)
+
+```
+
+## Does the dragon data need crossed or nested random effects? 
+
+
 
 ## Random slopes
