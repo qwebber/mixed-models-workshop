@@ -84,3 +84,17 @@ head(df)
 
 ## mixed model syntax
 mod1 <- lmer(A ~ B + (1 | season) + (1 | ID), data = df)
+
+
+## mixed model with mountain range and site as nested random effects
+model3 <- lmer(testScore ~ bodyLength + (1|mountainRange/site), data = dragons)
+summary(model3)
+
+
+ggplot(dragons, aes(x = bodyLength, y = testScore, colour = site)) +
+  facet_wrap(~mountainRange, nrow=2) +   # a panel for each mountain range
+  geom_point(alpha = 0.5) +
+  theme_classic() +
+  geom_line(data = cbind(dragons, pred = predict(model3)), aes(y = pred), size = 1) +  # adding predicted line from mixed model 
+  theme(legend.position = "none",
+        panel.spacing = unit(2, "lines"))  # adding space between panels
