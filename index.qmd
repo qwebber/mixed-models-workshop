@@ -155,7 +155,20 @@ We can interpret this outcome as the differences between mountain ranges account
 
 ## Incorporating additional random effects
 
+Depending on the structure of our data, we can incorporate additional random effects, which can be considered as nested random effect or crossed random effects.
+
 ### Nested random effects
+
+Nested random effects are (in my opinion) easier to interpret. Nested = hierarchical and these are considered a set of variables that can be **within** each other. 
+
+For example: observing n = 20 individual organisms in n = 10 different populations (N = 200 data points). If individuals are assigned to a population because they are either spatially or temporally restricted from being in another population, we would **nest** individual identity within population. We can therefore account for both individual and population using nested random effects. The syntax will look like this: 
+
+```{r}
+
+mod1 <- lmer(variable ~ A + B + (1 | population/ID), data = df)
+
+mod2 <- lmer(variable ~ A + B + (1 | population) + (1|population:ID), data = df)
+```
 
 ### Crossed random effects
 
