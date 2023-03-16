@@ -330,11 +330,42 @@ bodyLength -0.924</code></pre>
 <pre><code>[1] 0.6028394</code></pre>
 </div>
 </div>
+<p>We can interpret this outcome as the differences between mountain ranges accounts for ~60% of the variance in test score (after we account for fixed effects). The other ~40% of the variance is attributable to residual (or unknown) sources of error.</p>
 </section>
 <section id="incorporating-additional-random-effects" class="level2">
 <h2 class="anchored" data-anchor-id="incorporating-additional-random-effects">Incorporating additional random effects</h2>
+<p>Depending on the structure of our data, we can incorporate additional random effects, which can be considered as nested random effect or crossed random effects.</p>
 <section id="nested-random-effects" class="level3">
 <h3 class="anchored" data-anchor-id="nested-random-effects">Nested random effects</h3>
+<p>Nested random effects are (in my opinion) easier to interpret. Nested = hierarchical and these are considered a set of variables that can be <strong>within</strong> each other.</p>
+<p>For example: observing n = 10 individual organisms in each of n = 10 different populations (N = 100 data points). If individuals are assigned to a population because they are either spatially or temporally restricted from being in another population, we would <strong>nest</strong> individual identity within population. We can therefore account for both individual and population using nested random effects. The syntax will look like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="do">## generate fake dataset</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">A =</span> <span class="fu">runif</span>(<span class="dv">150</span>), </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">B =</span> <span class="fu">runif</span>(<span class="dv">150</span>),</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">ID =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>, <span class="st">"E"</span>, </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"F"</span>, <span class="st">"G"</span>, <span class="st">"H"</span>, <span class="st">"I"</span>, <span class="st">"J"</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"H"</span>, <span class="st">"I"</span>, <span class="st">"K"</span>, <span class="st">"L"</span>, <span class="st">"M"</span>), </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">times =</span> <span class="dv">10</span>),</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">population =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"5"</span>, </span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">"6"</span>, <span class="st">"7"</span>, <span class="st">"8"</span>, <span class="st">"9"</span>, <span class="st">"10"</span>), </span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">each =</span> <span class="dv">15</span>))</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+      A      B ID    population
+  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     
+1 0.688 0.0824 A     1         
+2 0.113 0.822  B     1         
+3 0.652 0.931  C     1         
+4 0.311 0.0774 D     1         
+5 0.967 0.598  E     1         
+6 0.179 0.888  F     1         </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="do">## syntax 1</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(A <span class="sc">~</span> B <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> population<span class="sc">/</span>ID), <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="crossed-random-effects" class="level3">
 <h3 class="anchored" data-anchor-id="crossed-random-effects">Crossed random effects</h3>
