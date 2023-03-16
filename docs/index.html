@@ -508,17 +508,20 @@ Number of Groups: 8 </code></pre>
 <span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 4
-       A     B ID    population
-   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     
-1 0.266  0.747 A     1         
-2 0.0115 0.981 B     1         
-3 0.990  0.901 C     1         
-4 0.495  0.875 D     1         
-5 0.166  0.807 E     1         
-6 0.0748 0.977 F     1         </code></pre>
+       A      B ID    population
+   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     
+1 0.296  0.0808 A     1         
+2 0.808  0.600  B     1         
+3 0.212  0.987  C     1         
+4 0.142  0.834  D     1         
+5 0.0877 0.874  E     1         
+6 0.284  0.0344 F     1         </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="do">## mixed model syntax</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(A <span class="sc">~</span> B <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> population<span class="sc">/</span>ID), <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>boundary (singular) fit: see help('isSingular')</code></pre>
+</div>
 </div>
 </section>
 <section id="crossed-random-effects" class="level3">
@@ -526,33 +529,33 @@ Number of Groups: 8 </code></pre>
 <p>Crossed random effects are are more challenging to assign and interpret (in my opinion). I like to think of crossed random effects as sampling through time. Crossed effects can be assigned when subjets of one variable (e.g.&nbsp;individual ID) have experienced some, or all, of the levels in the other variable (e.g.&nbsp;season). Crossed effects can be <strong>full</strong> (if all IDs are observed in all seasons) or <strong>partial</strong> (if some IDs are observed in some seasons).</p>
 <p>For example: If we observe n = 15 individual organisms in each of n = 12 different (sub)seasons (N = 180 data points). Individuals are assigned to a season because they were observed in a season. We can therefore account for both individual and season using crossed random effects. The syntax will look like this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="do">## generate fake dataset for crossed random effects</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">A =</span> <span class="fu">runif</span>(<span class="dv">180</span>), </span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">B =</span> <span class="fu">runif</span>(<span class="dv">180</span>),</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">ID =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>, <span class="st">"E"</span>, </span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"F"</span>, <span class="st">"G"</span>, <span class="st">"H"</span>, <span class="st">"I"</span>, <span class="st">"J"</span>,</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"H"</span>, <span class="st">"I"</span>, <span class="st">"K"</span>, <span class="st">"L"</span>, <span class="st">"M"</span>), </span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">times =</span> <span class="dv">12</span>),</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">season =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"early winter"</span>, <span class="st">"mid winter"</span>, <span class="st">"late winter"</span>, </span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"early spring"</span>, <span class="st">"mid spring"</span>, <span class="st">"late spring"</span>,</span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"early summer"</span>, <span class="st">"mid summer"</span>, <span class="st">"late summer"</span>, </span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"early fall"</span>, <span class="st">"mid fall"</span>, <span class="st">"late fall"</span>), </span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">each =</span> <span class="dv">15</span>))</span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="do">## generate fake dataset for crossed random effects</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">A =</span> <span class="fu">runif</span>(<span class="dv">180</span>), </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">B =</span> <span class="fu">runif</span>(<span class="dv">180</span>),</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">ID =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>, <span class="st">"E"</span>, </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"F"</span>, <span class="st">"G"</span>, <span class="st">"H"</span>, <span class="st">"I"</span>, <span class="st">"J"</span>,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"H"</span>, <span class="st">"I"</span>, <span class="st">"K"</span>, <span class="st">"L"</span>, <span class="st">"M"</span>), </span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">times =</span> <span class="dv">12</span>),</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">season =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"early winter"</span>, <span class="st">"mid winter"</span>, <span class="st">"late winter"</span>, </span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"early spring"</span>, <span class="st">"mid spring"</span>, <span class="st">"late spring"</span>,</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"early summer"</span>, <span class="st">"mid summer"</span>, <span class="st">"late summer"</span>, </span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"early fall"</span>, <span class="st">"mid fall"</span>, <span class="st">"late fall"</span>), </span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">each =</span> <span class="dv">15</span>))</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 4
-      A      B ID    season      
-  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;       
-1 0.693 0.351  A     early winter
-2 0.761 0.442  B     early winter
-3 0.128 0.0807 C     early winter
-4 0.674 0.201  D     early winter
-5 0.472 0.565  E     early winter
-6 0.233 0.415  F     early winter</code></pre>
+       A      B ID    season      
+   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;       
+1 0.0572 0.0817 A     early winter
+2 0.884  0.572  B     early winter
+3 0.275  0.687  C     early winter
+4 0.923  0.783  D     early winter
+5 0.0986 0.326  E     early winter
+6 0.944  0.0487 F     early winter</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="do">## mixed model syntax</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(A <span class="sc">~</span> B <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> season) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> ID), <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="do">## mixed model syntax</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(A <span class="sc">~</span> B <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> season) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> ID), <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>boundary (singular) fit: see help('isSingular')</code></pre>
 </div>
@@ -563,9 +566,9 @@ Number of Groups: 8 </code></pre>
 <h2 class="anchored" data-anchor-id="does-the-dragon-data-need-crossed-or-nested-random-effects">Does the dragon data need crossed or nested random effects?</h2>
 <p>Test scores were collected at 3 sites within each of the 8 mountain ranges. Given the rule of thumb where spatial = nested and temporal = crossed, my suggestion would be to apply a nested random effect structure where site is nested within mountain range.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="do">## mixed model with mountain range and site as nested random effects</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>model4 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(testScore <span class="sc">~</span> bodyLength <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>mountainRange<span class="sc">/</span>site), <span class="at">data =</span> dragons)</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="do">## mixed model with mountain range and site as nested random effects</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>model4 <span class="ot">&lt;-</span> <span class="fu">lmer</span>(testScore <span class="sc">~</span> bodyLength <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>mountainRange<span class="sc">/</span>site), <span class="at">data =</span> dragons)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Linear mixed model fit by REML ['lmerMod']
 Formula: testScore ~ bodyLength + (1 | mountainRange/site)
@@ -593,21 +596,21 @@ Correlation of Fixed Effects:
            (Intr)
 bodyLength -0.955</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Now let's take a look at the relationship between test score and body length at each mountain range by site combination: </span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dragons, </span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> bodyLength, </span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> testScore, </span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">colour =</span> site)) <span class="sc">+</span></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">facet_wrap</span>(<span class="sc">~</span>mountainRange, <span class="at">nrow =</span> <span class="dv">2</span>) <span class="sc">+</span>   </span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="at">data =</span> </span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">cbind</span>(dragons, </span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>                        <span class="at">pred =</span> <span class="fu">predict</span>(model3)), </span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>                <span class="fu">aes</span>(<span class="at">y =</span> pred), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span>  </span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">panel.spacing =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">"lines"</span>))  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Now let's take a look at the relationship between test score and body length at each mountain range by site combination: </span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dragons, </span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> bodyLength, </span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> testScore, </span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">colour =</span> site)) <span class="sc">+</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">facet_wrap</span>(<span class="sc">~</span>mountainRange, <span class="at">nrow =</span> <span class="dv">2</span>) <span class="sc">+</span>   </span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="at">data =</span> </span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">cbind</span>(dragons, </span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>                        <span class="at">pred =</span> <span class="fu">predict</span>(model3)), </span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>                <span class="fu">aes</span>(<span class="at">y =</span> pred), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span>  </span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">panel.spacing =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">"lines"</span>))  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -627,9 +630,9 @@ bodyLength -0.955</code></pre>
 </section>
 <section id="other-r-packages-for-mixed-effects-models" class="level2">
 <h2 class="anchored" data-anchor-id="other-r-packages-for-mixed-effects-models">Other R packages for mixed effects models</h2>
-<p>[lme4]<a href="https://github.com/lme4/lme4" class="uri">https://github.com/lme4/lme4</a> &amp; [nlme]<a href="https://cran.r-project.org/web/packages/nlme/index.html" class="uri">https://cran.r-project.org/web/packages/nlme/index.html</a> are most commonly used to fit linear and generalized linear models. If you don’t need to do anything too fancy, one of these packages will suit your purposes.</p>
-<p>[glmmTMB]<a href="https://github.com/glmmTMB/glmmTMB" class="uri">https://github.com/glmmTMB/glmmTMB</a> is great for mixed-effects models with zero-inflation, a dispersion model, and/or some alternative var-cov structures for the random effects. Syntax is similar to lme4.</p>
-<p>[MCMCglmm]<a href="https://cran.r-project.org/web/packages/MCMCglmm/index.html" class="uri">https://cran.r-project.org/web/packages/MCMCglmm/index.html</a> &amp; [brms]<a href="https://cran.r-project.org/web/packages/brms/index.html" class="uri">https://cran.r-project.org/web/packages/brms/index.html</a> are great for fitting (generalized) linear mixed-effects models in a Bayesian framework. The syntax is totally different and the outputs of Bayesian models (especially MCMCglmm) can be a challenge to deal with.</p>
+<p><a href="https://github.com/lme4/lme4">lme4</a> &amp; <a href="https://cran.r-project.org/web/packages/nlme/index.html">nlme</a> are most commonly used to fit linear and generalized linear models. If you don’t need to do anything too fancy, one of these packages will suit your purposes.</p>
+<p><a href="https://github.com/glmmTMB/glmmTMB">glmmTMB</a> is great for mixed-effects models with zero-inflation, a dispersion model, and/or some alternative var-cov structures for the random effects. Syntax is similar to lme4.</p>
+<p><a href="https://cran.r-project.org/web/packages/MCMCglmm/index.html">MCMCglmm</a> &amp; <a href="https://cran.r-project.org/web/packages/brms/index.html">brms</a> are great for fitting (generalized) linear mixed-effects models in a Bayesian framework. The syntax is totally different and the outputs of Bayesian models (especially MCMCglmm) can be a challenge to deal with.</p>
 </section>
 
 </main>
