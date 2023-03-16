@@ -151,6 +151,7 @@ In the `Random Effects` section of the summary for model 2. Note, mountain range
 
 ```
 
+We can interpret this outcome as the differences between mountain ranges accounts for ~60% of the variance in test score (after we account for fixed effects). The other ~40% of the variance is attributable to residual (or unknown) sources of error.
 
 ## Incorporating additional random effects
 
