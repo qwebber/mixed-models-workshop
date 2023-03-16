@@ -139,16 +139,22 @@ summary(model2)
 
 ### Where's my p-value??
 
-You might wonde why the `lmer` function from the `lme4` R package does not provide p-values. Douglas Bates (the author of `lme4`) provides a [summary] here<https://stat.ethz.ch/pipermail/r-help/2006-May/094765.html> of why the function does not output p-values. TL;DR -- Bates says the 
+You might wonde why the `lmer` function from the `lme4` R package does not provide p-values. Douglas Bates (the author of `lme4`) provides a [summary] here<https://stat.ethz.ch/pipermail/r-help/2006-May/094765.html> of why the function does not output p-values. TL;DR -- Bates disagrees with how p-values are calculated for mixed models in SAS (circa 2006!) and has chosen not to translate the underlying math used in SAS to calculate p-values in R.
 
-Nevertheless, there are ways to pull p-values for your fixed effects. Here are two options:
+Nevertheless, regardless of Bates, there are ways to pull p-values for your fixed effects from the lmer function. Here is a good option:
 
 ```{r}
 
 ## Extract full model summary (including p-values for each fixed effect):
 jtools::summ(model2)
 
-## another option is to use the nlme R package (function is lme) -- this is the package used by Zuur et al in their books
+```
+
+If you don't want to mess around with these extra steps, you can use the nlme R package (function is lme) -- this is the package used by Zuur et al in their books
+
+```{r}
+
+## mixed model using lme (note, syntax for random effects is slightly different than lme4)
 model3 <- lme(testScore ~ bodyLength, random = ~1|mountainRange, data = dragons)
 summary(model3)
 
@@ -265,3 +271,12 @@ Can accommodate non-normal distributions (e.g. Poisson or binomial)
 ## Model selection 
 
 It's possible, but there are some tricks for choosing random effects.
+
+## Other R packages for mixed effects models
+
+[lme4](https://github.com/lme4/lme4) & [nlme](https://cran.r-project.org/web/packages/nlme/index.html) are most commonly used to fit linear and generalized linear models. If you don't need to do anything too fancy, one of these packages will suit your purposes.
+
+[glmmTMB](https://github.com/glmmTMB/glmmTMB) is great for mixed-effects models with zero-inflation, a dispersion model, and/or some alternative var-cov structures for the random effects. Syntax is similar to lme4.
+
+[MCMCglmm](https://cran.r-project.org/web/packages/MCMCglmm/index.html) & [brms](https://cran.r-project.org/web/packages/brms/index.html) are great for fitting (generalized) linear mixed-effects models in a Bayesian framework. The syntax is totally different and the outputs of Bayesian models (especially MCMCglmm) can be a challenge to deal with.
+
