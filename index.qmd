@@ -212,7 +212,6 @@ mod1 <- lmer(A ~ B + (1 | season) + (1 | ID), data = df)
 ```
 
 ## Does the dragon data need crossed or nested random effects? 
-
 Test scores were collected at 3 sites within each of the 8 mountain ranges. Given the rule of thumb where spatial = nested and temporal = crossed, my suggestion would be to apply a nested random effect structure where site is nested within mountain range. 
 
 ```{r, message = FALSE, warning = FALSE}
@@ -223,14 +222,28 @@ summary(model3)
 
 #Now let's take a look at the relationship between test score and body length at each mountain range by site combination: 
 
-ggplot(dragons, aes(x = bodyLength, y = testScore, colour = site)) +
-      facet_wrap(~mountainRange, nrow=2) +   # a panel for each mountain range
+ggplot(dragons, 
+       aes(x = bodyLength, 
+           y = testScore, 
+           colour = site)) +
+      facet_wrap(~mountainRange, nrow = 2) +   
       geom_point(alpha = 0.5) +
       theme_classic() +
-      geom_line(data = cbind(dragons, pred = predict(model3)), aes(y = pred), size = 1) +  # adding predicted line from mixed model 
+      geom_line(data = 
+                  cbind(dragons, 
+                        pred = predict(model3)), 
+                aes(y = pred), size = 1) +  
       theme(legend.position = "none",
-            panel.spacing = unit(2, "lines"))  # adding space between panels
+            panel.spacing = unit(2, "lines"))  
 
 ```
 
 ## Random slopes
+
+
+
+## Generalized linear mixed models
+
+Can accommodate non-normal distributions (e.g. Poisson or binomial)
+
+## Model selection 
