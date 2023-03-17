@@ -122,7 +122,7 @@ Our interpretation of this model is that body length does not affect test score,
 
 **Fixed effects** are variables that we expect will have a biological effect on our response variable. These can be continuous or categorical. In our case, we are interested in the effect of body length on test score.
 
-**Random effects** are grouped factors for which we are trying to control (i.e. those we don't want to test for biological or statistical effects). Random effects MUST be categorical and you can't force them to be continuous. A general rule of thumb about random effects is that there must be at least 5 levels within the variable (e.g. there are 8 mountain ranges). Fewer than 5 levels and this variable should either be excluded or considered a fixed effect. Estimating variance on \<5 data points is very imprecise and although it is technically possible (R will give an output), we have limited confidence in these estimates.
+**Random effects** are grouped factors for which we are trying to control (i.e. those we don't want to test for biological or statistical effects). Random effects MUST be categorical and you can't force them to be continuous. A general rule of thumb about random effects is that there must be at least 5 levels within the variable (e.g. there are 8 mountain ranges). Fewer than 5 levels and this variable should either be excluded or considered a fixed effect. Estimating variance on <5 data points is very imprecise and although it is technically possible (R will give an output), we have limited confidence in these estimates.
 
 ### Fitting a mixed model
 
@@ -134,6 +134,12 @@ Here we use the syntax `(1|mountainRange)` to incorporate mountain range as a ra
 
 model2 <- lmer(testScore ~ bodyLength + (1|mountainRange), data = dragons)
 summary(model2)
+
+## reporting model performance 
+performance::check_model(model2)
+
+## reporting model fit
+piecewiseSEM::rsquared(model2)
 
 ```
 
