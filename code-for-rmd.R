@@ -50,6 +50,12 @@ summary(model1)
 model2 <- lmer(testScore ~ bodyLength + (1|mountainRange), data = dragons)
 summary(model2)
 
+## reporting model performance 
+performance::check_model(model2)
+
+## reporting model fit
+piecewiseSEM::rsquared(model2)
+
 ## where's my p-value?
 
 ## Extract full model summary (including p-values for each fixed effect):
