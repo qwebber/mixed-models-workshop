@@ -191,7 +191,7 @@ Nested random effects are (in my opinion) easier to interpret. Nested = hierarch
 
 For example: observing n = 15 individual organisms in each of n = 10 different populations (N = 150 data points). If individuals are assigned to a population because they are either spatially or temporally restricted from being in another population, we would **nest** individual identity within population. We can therefore account for both individual and population using nested random effects. The syntax will look like this: 
 
-```{r}
+```{r, warning = FALSE, message = FALSE}
 
 ## generate fake dataset for nested random effects
 df <- tibble(A = runif(150), 
